@@ -53,13 +53,25 @@ var player = new function() {
                     console.error(error);
             });
 
-
+    var x;
+    var address=prompt("Please enter your valet address e.g.","0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3");
+    //if (address!=null){
+    if (web3.utils.isAddress(address)) {
+        x="Thanks!";
+        alert(x);
+    }
+    else {
+        alert("Address not valid! Exiting")
+        location.reload(); 
+    }
+    
 
     this.update = function() {
 
+    
 
         if (!dead) {
-            console.log(hsSent)
+            //console.log(hsSent)
             this.ySpeed += gravity;
             if (this.y <= screen.height / 2 - 200 && this.ySpeed <= 0) {
                 for (var i = 0; i < blocks.length; i++) {
@@ -78,10 +90,10 @@ var player = new function() {
             ctx.fillText("Press r to restart", screenWidth / 2, (screenHeight / 2) + 50);
             if (!hsSent){
                 console.log("läuft")
-                Coursetro.methods.setHighScore(score).send({ from: "0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3" }).then(console.log)
+                Coursetro.methods.setHighScore(score).send({ from: address }).then(console.log)
                 hsSent = "true"
             }
-            console.log(hsSent)
+            //console.log(hsSent)
         }
 
         //A key pressed
