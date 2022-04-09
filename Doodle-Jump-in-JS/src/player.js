@@ -23,6 +23,7 @@ var player = new function() {
     var red = 255;
     var green = 0;
     var blue = 0;
+    //var hsSent = new Boolean("false");
 
     //Blockchain stuffif (typeof web3 !== 'undefined') {
     if (typeof web3 !== 'undefined') {
@@ -34,8 +35,8 @@ var player = new function() {
     web3.eth.defaultAccount = web3.eth.accounts[0];
 
     var Coursetro = new web3.eth.Contract(
-        [{"inputs":[],"name":"getValue","outputs":[{"internalType":"int256","name":"","type":"int256"},{"internalType":"int256","name":"","type":"int256"},{"internalType":"int256","name":"","type":"int256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"int256","name":"r","type":"int256"},{"internalType":"int256","name":"g","type":"int256"},{"internalType":"int256","name":"b","type":"int256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-        , '0x85dC9a64f7Dc51923942eA45FDcbf8352b2301a0');
+        [{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"r","type":"uint256"},{"internalType":"uint256","name":"g","type":"uint256"},{"internalType":"uint256","name":"b","type":"uint256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+        , '0x621c70aEF5A06676943e179FBb5F2FBc97270881');
 
     Coursetro.methods.getValue().call(
                 function(error, result){
@@ -53,8 +54,12 @@ var player = new function() {
             });
 
 
+
     this.update = function() {
+
+
         if (!dead) {
+            console.log(hsSent)
             this.ySpeed += gravity;
             if (this.y <= screen.height / 2 - 200 && this.ySpeed <= 0) {
                 for (var i = 0; i < blocks.length; i++) {
@@ -71,6 +76,12 @@ var player = new function() {
             ctx.fillText("You Died!", screenWidth / 2, screenHeight / 2); 
             ctx.font = "36px Arial";
             ctx.fillText("Press r to restart", screenWidth / 2, (screenHeight / 2) + 50);
+            if (!hsSent){
+                console.log("läuft")
+                Coursetro.methods.setHighScore(score).send({ from: "0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3" }).then(console.log)
+                hsSent = "true"
+            }
+            console.log(hsSent)
         }
 
         //A key pressed

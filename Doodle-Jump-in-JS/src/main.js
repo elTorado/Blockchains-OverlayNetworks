@@ -16,6 +16,7 @@ var holdingLeftKey = false;
 var holdingRightKey = false;
 var keycode;
 var dead = false;
+var hsSent = false;
 var difficulty = 0;
 var lowestBlock = 0;
 var score = 0;
