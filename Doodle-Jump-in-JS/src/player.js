@@ -9,6 +9,7 @@ var player = new function() {
     this.ySpeed = 0;
     this.springBootsDurability = 0;
     this.direction = "left";
+    this.hsSent = false;
     var canvas = document.createElement('canvas');
     canvas.id = "CursorLayer";
     canvas.width = 500;
@@ -23,7 +24,6 @@ var player = new function() {
     var red = 255;
     var green = 0;
     var blue = 0;
-    //var hsSent = new Boolean("false");
 
     //Blockchain stuffif (typeof web3 !== 'undefined') {
     if (typeof web3 !== 'undefined') {
@@ -36,7 +36,7 @@ var player = new function() {
 
     var Coursetro = new web3.eth.Contract(
         [{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"r","type":"uint256"},{"internalType":"uint256","name":"g","type":"uint256"},{"internalType":"uint256","name":"b","type":"uint256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-        , '0x621c70aEF5A06676943e179FBb5F2FBc97270881');
+        , '0xf030bE76d66596Ff54D06FC35c8EFd1e5ED0D736');
 
     Coursetro.methods.getValue().call(
                 function(error, result){
@@ -88,12 +88,13 @@ var player = new function() {
             ctx.fillText("You Died!", screenWidth / 2, screenHeight / 2); 
             ctx.font = "36px Arial";
             ctx.fillText("Press r to restart", screenWidth / 2, (screenHeight / 2) + 50);
-            if (!hsSent){
+            if (!this.hsSent){
                 console.log("läuft")
                 Coursetro.methods.setHighScore(score).send({ from: address }).then(console.log)
-                hsSent = "true"
+                this.hsSent = true
+            console.log("hat gesendet")
             }
-            //console.log(hsSent)
+            console.log(this.hsSent)
         }
 
         //A key pressed
@@ -188,10 +189,60 @@ var player = new function() {
         }
     }
 
-    this.drawFigurine = function(){
-         var color = "rgba("+red+","+green+","+blue +", 0.8)"
-         ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+    // add code here for drawing character
+    // can also be: var PlayerStyle (not clearly know differences)
+
+    PlayerStyle = {
+        // color style R G B number + transparency
+        // another style using in monster and block, only index
+
+        // line of character
+        linecolor: "rgba(255, 228, 225 ,0.9 )",
+        // color fill in
+        fillcolor: "rgba("+red+","+green+","+blue +", 0.8)",
+
+        //the point array of line
+        // first number is x indexes, second is y indexes
+        ArrayCha1: [
+            [5, 13], [6, 13], [8, 13], [9, 13], [5, 12], [8, 12],
+            [3, 11], [4, 11], [5, 11], [6, 11], [7, 11], [8, 11], [9, 11], [10, 11],
+            [3, 10], [5, 10], [10, 10], [10, 10],
+            [3, 9], [7, 9], [8, 9], [10, 9], [11, 9], [12, 9],
+            [3, 8], [7, 8], [10, 8], [3, 7], [5, 7], [7, 7], [9, 7], [10, 7],
+            [1, 6], [2, 6], [3, 6], [7, 6], [10, 6],
+            [3, 5], [5, 5], [6, 5], [7, 5], [10, 5], [11, 5], [3, 4], [11, 4],
+            [3, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [3, 2], [4, 2], [5, 2]
+        ],
+
+        //the point array of color fill in
+        ArrayCha2: [
+            [4, 10], [6, 10], [7, 10], [8, 10], [9, 10],
+            [4, 9], [5, 9], [6, 9], [9, 9],
+            [4, 8], [5, 8], [6, 8], [8, 8], [9, 8],
+            [4, 7], [6, 7], [8, 7],
+            [4, 6], [5, 6], [6, 6], [8, 6], [9, 6],
+            [4, 5], [8, 5], [9, 5],
+            [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4],
+            [4, 3]
+        ]
+
+    };
+
+    this.drawFigurine = function () {
+        // draw the line
+        // divided by 14 means the character designed to have 14*14 rectangles
+        for (var i = 0; i < PlayerStyle.ArrayCha1.length; i++) {
+            var conscolor = PlayerStyle.linecolor;
+            ctx.fillStyle = conscolor;
+            ctx.fillRect(this.x + PlayerStyle.ArrayCha1[i][0] * 80 / 14, this.y + PlayerStyle.ArrayCha1[i][1] * 80 / 14, this.width / 14, this.height / 14);
+        }
+
+        // fill the color
+        for (var i = 0; i < PlayerStyle.ArrayCha2.length; i++) {
+            var color = PlayerStyle.fillcolor;
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x + PlayerStyle.ArrayCha2[i][0] * 80 / 14, this.y + PlayerStyle.ArrayCha2[i][1] * 80 / 14, this.width / 14, this.height / 14);
+        }
     }
 
     this.draw = function() {

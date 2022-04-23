@@ -61,6 +61,7 @@ function keydown(e) {
 
 
         dead = false;
+        player.hsSent = false
     }
 }
 
@@ -101,7 +102,7 @@ function loop() {
      
     if (delta > interval) {
         var backgroundImage = new Image();
-        backgroundImage.src = "Sprites/background.png";
+        backgroundImage.src = "Sprites/bg10.png";
         ctx.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight) 
 
         for (var i = 0; i < blocks.length; i++) {
