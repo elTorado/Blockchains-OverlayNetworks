@@ -37,7 +37,7 @@ When ganache starts running it shows all available accounts. Choose one address 
 
 ### 4. Start game and enjoy 
 
-Open "/Doodle-Jump-in-JS/index.html" with a web browser. You will be asked for the valet address from step 1.
+Open "/index.html" with a web browser. You will be asked for the valet address from step 1.
 
 ## Other Informations
 
