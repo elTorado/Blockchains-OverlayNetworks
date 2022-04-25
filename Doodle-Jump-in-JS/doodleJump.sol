@@ -4,7 +4,7 @@ contract doodleJump{
     uint red = random(255);
     uint green = random1(255);
     uint blue = random2(255);
-    uint highscore = 0;
+    mapping (address => uint) highscore;
 
     function setValue(uint r, uint g, uint b) public {
         red = r;
@@ -13,17 +13,21 @@ contract doodleJump{
     }
 
     function setHighScore(uint hs) public {
-        highscore = hs;
+        if(highscore[msg.sender] < hs){
+            highscore[msg.sender] = hs;
+        } else {
+            highscore[msg.sender] = 1;
+        }
     }
 
    function getHighScore() public view returns (uint){
-        return (highscore);
+        return (highscore[msg.sender]);
     }
 
 
 
     function getValue() public view returns (uint, uint, uint){
-        return (red, green, blue);
+        return (random(255), random1(255), random2(255));
     }
 
     function random(uint number) public view returns(uint){
