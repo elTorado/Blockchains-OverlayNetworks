@@ -23,7 +23,11 @@ When ganache starts running it shows all available accounts. Choose one address 
 
 2.2 Do not forget to compile the file with Ctrl+S or by switching to the compile tab. 
 
-2.3 Deploy the contract by switching to the deployment tab and copy the contract address. See image below:
+2.3 Change the Environment to Web3 Provider 
+
+![Screenshot from 2022-04-25 13-49-39](https://user-images.githubusercontent.com/10309173/165083529-7bfdf786-4902-4284-a0e7-4fb26388c5b4.png)
+
+2.4 Deploy the contract by switching to the deployment tab and copy the contract address. See image below:
 
 ![Screenshot from 2022-04-24 09-58-44](https://user-images.githubusercontent.com/10309173/164966431-da743b2f-b185-40de-a1d3-bd343efa8540.png)
 
