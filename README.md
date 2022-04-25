@@ -1,4 +1,5 @@
-# Doodle Jump on the Blockchain
+# Doodle Jump on the Blockchain - Group 4 | Nike    
+
 
 This project was created in the scope of the course "Blockchains and Overlay Networks" as a Challenge Task project at
 the University of Zurich in spring semester 2022. 
