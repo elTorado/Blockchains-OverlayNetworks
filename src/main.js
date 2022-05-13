@@ -16,6 +16,9 @@ var holdingLeftKey = false;
 var holdingRightKey = false;
 var keycode;
 var dead = false;
+
+var safed = true;
+var cheating = false;
 var hsSent = false;
 var difficulty = 0;
 var lowestBlock = 0;
@@ -32,6 +35,8 @@ var then = Date.now();
 var interval = 1000/fps;
 var delta;
 
+
+
 function keydown(e) {
     if (e.keyCode === 65) {
         holdingLeftKey = true;
@@ -39,7 +44,7 @@ function keydown(e) {
         holdingRightKey = true;
     }
 
-    if (e.keyCode === 82 && dead) {
+    if (e.keyCode === 82 && safed) {
         blocks = [];
         lowestBlock = 0;
         difficulty = 0;
@@ -60,8 +65,20 @@ function keydown(e) {
         player.y = 550;
 
 
-        dead = false;
-        player.hsSent = false
+        Coursetro.methods.startGame().send(
+            { from: address },
+            function(error, result){
+                if(!error)
+                    {
+                        safed = false
+                    }
+                else {
+                    console.error(error);
+                    console.error("someone is cheating");
+                    cheating = true;
+                }
+            }
+        ).then(console.log);
     }
 }
 
@@ -84,6 +101,13 @@ function showScore() {
     ctx.fillText(score, 15, 40); 
 }
 
+function showHighScore() {
+    ctx.font = "36px Arial";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "left";
+    ctx.fillText(highscore, 15, 80);
+}
+
 blocks.push(new block);
 blocks[0].x = 300;
 blocks[0].y = 650;
@@ -92,6 +116,12 @@ blocks[0].type = 0;
 blocks[0].powerup = 0;
 
 blockSpawner();
+
+function performCalls(){
+    for (let x of commands) {
+        console.log("command");
+    }
+}
 
 function loop() {
     requestAnimationFrame(loop);
@@ -116,6 +146,7 @@ function loop() {
         player.draw();
 
         showScore();
+        showHighScore();
 
         ctx.fill();
         then = now - (delta % interval);

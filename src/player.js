@@ -25,20 +25,31 @@ var player = new function() {
     var green = 0;
     var blue = 0;
 
-    //Blockchain stuffif (typeof web3 !== 'undefined') {
-    if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-    } else {
-            // set the provider you want from Web3.providers
-            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    }
-    web3.eth.defaultAccount = web3.eth.accounts[0];
+//Blockchain stuff
+if (typeof web3 !== 'undefined') {
+    web3 = new Web3(web3.currentProvider);
+} else {
+    // set the provider you want from Web3.providers
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+}
+web3.eth.defaultAccount = web3.eth.accounts[0];
 
-    var Coursetro = new web3.eth.Contract(
-        [{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"r","type":"uint256"},{"internalType":"uint256","name":"g","type":"uint256"},{"internalType":"uint256","name":"b","type":"uint256"}],"name":"setValue","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-        , '0x4612BeBbB086Fae0d050BE8d8d58aC56Dca844Da');
+Coursetro = new web3.eth.Contract(
+    [{"inputs":[],"name":"die","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isDead","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startGame","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+   , '0x7C98F2097E4bB4aA4ECAc1BD6c7404FF2f80c90a');
+    address=prompt("Please enter your valet address e.g.","0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3");
+    //if (address!=null){
+    if (web3.utils.isAddress(address)) {
+        x="Thanks!";
+        alert(x);
+    }
+    else {
+        alert("Address not valid! Exiting")
+        location.reload();
+    }
 
     Coursetro.methods.getValue().call(
+                { from: address },
                 function(error, result){
                 if(!error)
                     {
@@ -49,28 +60,45 @@ var player = new function() {
                         console.log(this.red, this.blue, this.green);
 
                     }
-                else
+                else {
                     console.error(error);
+                    dead = true;
+                    console.log(address);
+                }
             });
 
     var x;
-    var address=prompt("Please enter your valet address e.g.","0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3");
-    //if (address!=null){
-    if (web3.utils.isAddress(address)) {
-        x="Thanks!";
-        alert(x);
-    }
-    else {
-        alert("Address not valid! Exiting")
-        location.reload(); 
-    }
+    Coursetro.methods.isDead().call(
+                { from: address },
+                function(error, result){
+                if(!error)
+                    {
+                        console.log(result);
+                        dead =  result;
+                        safed = true;
+                        console.info("set player status isDead: " + dead);
+                    }
+                else {
+                    console.error(error);
+                }
+            });
+    Coursetro.methods.getHighScore().call(
+                { from: address },
+                function(error, result){
+                if(!error)
+                    {
+                        highscore = result;
+                    }
+                else {
+                    console.error(error);
+                    console.error("konnte highscore des players nicht finden");
+                }
+            });
     
 
     this.update = function() {
 
-    
-
-        if (!dead) {
+        if (!dead && !safed && !cheating) {
             //console.log(hsSent)
             this.ySpeed += gravity;
             if (this.y <= screen.height / 2 - 200 && this.ySpeed <= 0) {
@@ -81,20 +109,32 @@ var player = new function() {
                 this.y += this.ySpeed;
             }
             yDistanceTravelled -= this.ySpeed;
-        } else {
-            ctx.font = "60px Arial";
+        } else if(cheating){
+            ctx.font = "30px Arial";
             ctx.fillStyle = "red";
             ctx.textAlign = "center";
-            ctx.fillText("You Died!", screenWidth / 2, screenHeight / 2); 
-            ctx.font = "36px Arial";
-            ctx.fillText("Press r to restart", screenWidth / 2, (screenHeight / 2) + 50);
-            if (!this.hsSent){
-                console.log("läuft")
-                Coursetro.methods.setHighScore(score).send({ from: address }).then(console.log)
-                this.hsSent = true
-            console.log("hat gesendet")
+            ctx.fillText("This account is already in a game", screenWidth / 2, screenHeight / 2);
+            ctx.font = "20px Arial";
+            ctx.fillText("finish that game before starting a new one", screenWidth / 2, (screenHeight / 2) + 50);
+
+        } else if(safed && !dead){
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            if(score > highscore){
+                highscore = score;
             }
-            console.log(this.hsSent)
+            ctx.fillText("Your current \n highscore is "+highscore, screenWidth / 2, screenHeight / 2);
+            ctx.font = "36px Arial";
+            ctx.fillText("Press r to start a new attempt", screenWidth / 2, (screenHeight / 2) + 50);
+        } else {
+            ctx.font = "66px Arial";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.fillText("You died!", screenWidth / 2, screenHeight / 2);
+            ctx.font = "36px Arial";
+            ctx.fillText("Your final highscore is "+highscore, screenWidth / 2, (screenHeight / 2) + 50);
+
         }
 
         //A key pressed
@@ -127,10 +167,26 @@ var player = new function() {
             } 
             if (this.y > blocks[i].y) {
                 //Check for hit monster
-                if (blocks[i].monster !== 0 && blocks[i].monster !== undefined) {
-                    if (this.x >= blocks[i].x - this.width + 15 && this.x <= blocks[i].x + blocks[i].width - 15 &&
-                        this.y >= blocks[i].y - blocks[i].height && this.y <= blocks[i].y + blocks[i].height) {
-                        dead = true;
+                if (blocks[i].monster !== 0 && blocks[i].monster !== undefined && (!dead && !safed) ) {
+                    //die to a monster
+                    if(blocks[i].monster == "smallRed"){
+                        if (this.x >= blocks[i].x - this.width + 15 && this.x <= blocks[i].x + blocks[i].width - 15 &&
+                            this.y >= blocks[i].y - blocks[i].height && this.y <= blocks[i].y + blocks[i].height) {
+                            dead = true;
+                            safed = false;
+                            Coursetro.methods.die().send({ from: address }).then(console.log)
+                            console.log("died to monster");
+
+                        }
+                    }
+                    else if (blocks[i].monster == "safePoint"){
+                        if (this.x >= blocks[i].x - this.width + 15 && this.x <= blocks[i].x + blocks[i].width - 15 &&
+                            this.y >= blocks[i].y - blocks[i].height && this.y <= blocks[i].y + blocks[i].height) {
+                            dead = false;
+                            safed = true;
+                            Coursetro.methods.setHighScore(score).send({ from: address }).then(console.log)
+                            console.log("safed the game");
+                        }
                     }
                 }
             }
@@ -144,8 +200,10 @@ var player = new function() {
             }
         }
 
-        if (this.y >= blocks[lowestBlock].y) {
+        if (this.y >= blocks[lowestBlock].y && !dead && !safed) {
             dead = true;
+            Coursetro.methods.die().send({ from: address }).then(console.log)
+            console.log("died to ground");
         }
 
         if (lowestBlock >= 45) {
