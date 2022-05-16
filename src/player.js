@@ -36,7 +36,7 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 
 Coursetro = new web3.eth.Contract(
     [{"inputs":[],"name":"die","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isDead","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startGame","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-   , '0x7C98F2097E4bB4aA4ECAc1BD6c7404FF2f80c90a');
+   , '0xc1e84A778a92e926032b151F72156918f49527c5');
     address=prompt("Please enter your valet address e.g.","0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3");
     //if (address!=null){
     if (web3.utils.isAddress(address)) {
@@ -57,6 +57,7 @@ Coursetro = new web3.eth.Contract(
                         red =  result[Object.keys(result)[0]];
                         blue =  result[Object.keys(result)[1]];
                         green =  result[Object.keys(result)[2]];
+                        PlayerStyle.fillcolor = "rgba("+red+","+green+","+blue +", 0.8)"
                         console.log(this.red, this.blue, this.green);
 
                     }
@@ -98,7 +99,31 @@ Coursetro = new web3.eth.Contract(
 
     this.update = function() {
 
-        if (!dead && !safed && !cheating) {
+        if(beginning){
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "15px Arial";
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.fillText("Welcome to the Doodle-Jump Blackchain-Project", screenWidth / 2, screenHeight / 2-50);
+            ctx.fillText("The highscore of your account gets stored in the Etherium Blockchain", screenWidth / 2, screenHeight / 2-30);
+            ctx.fillText("When you die, your account will be blocked from trying to improve your highscore", screenWidth / 2, screenHeight / 2-10);
+            ctx.fillText("There are safepoints in the game, that you can jump into.", screenWidth / 2, screenHeight / 2+10);
+            ctx.fillText("They allow you to end a run without dying.", screenWidth / 2, screenHeight / 2+30);
+            ctx.fillText("Controls:", screenWidth / 2, screenHeight / 2+50);
+            ctx.fillText("a: move left", screenWidth / 2, screenHeight / 2+70);
+            ctx.fillText("d: move right", screenWidth / 2, screenHeight / 2+90);
+            ctx.fillText("r: start a new game", screenWidth / 2, screenHeight / 2+110);
+            ctx.fillText("q: continue from this explenation screen", screenWidth / 2, screenHeight / 2+130);
+            ctx.fillText("This is your Doodle", screenWidth / 2, screenHeight / 2+280);
+            ctx.fillText("Its look is unique and stored in the Blockchain on your account", screenWidth / 2, screenHeight / 2+300);
+            ctx.fillText("If you are careless and let it die, there will be no other like it", screenWidth / 2, screenHeight / 2+320);
+            ctx.fillText("Be carefull", screenWidth / 2, screenHeight / 2+340);
+            ctx.font = "20px Arial";
+
+        }
+        else if (!dead && !safed && !cheating) {
             //console.log(hsSent)
             this.ySpeed += gravity;
             if (this.y <= screen.height / 2 - 200 && this.ySpeed <= 0) {
@@ -298,6 +323,7 @@ Coursetro = new web3.eth.Contract(
         // fill the color
         for (var i = 0; i < PlayerStyle.ArrayCha2.length; i++) {
             var color = PlayerStyle.fillcolor;
+            console.log(color)
             ctx.fillStyle = color;
             ctx.fillRect(this.x + PlayerStyle.ArrayCha2[i][0] * 80 / 14, this.y + PlayerStyle.ArrayCha2[i][1] * 80 / 14, this.width / 14, this.height / 14);
         }

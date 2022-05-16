@@ -16,6 +16,7 @@ var holdingLeftKey = false;
 var holdingRightKey = false;
 var keycode;
 var dead = false;
+var beginning = "true";
 
 var safed = true;
 var cheating = false;
@@ -43,8 +44,11 @@ function keydown(e) {
     }   else if (e.keyCode === 68) {
         holdingRightKey = true;
     }
+    if(e.keyCode == 81 && beginning){
+        beginning = false;
+    }
 
-    if (e.keyCode === 82 && safed) {
+    if (e.keyCode === 82 && safed && !beginning) {
         blocks = [];
         lowestBlock = 0;
         difficulty = 0;
