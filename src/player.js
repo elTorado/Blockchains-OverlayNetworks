@@ -36,7 +36,7 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 
 Coursetro = new web3.eth.Contract(
     [{"inputs":[],"name":"die","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getHighScore","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getValue","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isDead","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"number","type":"uint256"}],"name":"random2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"hs","type":"uint256"}],"name":"setHighScore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startGame","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-   , '0xc1e84A778a92e926032b151F72156918f49527c5');
+   , '0xCbE85A30337e444C368Ace38930248634f28E1A7');
     address=prompt("Please enter your valet address e.g.","0x3E4A4A4Cb82d95560E2fBb9E6c1EBa14EE66dBD3");
     //if (address!=null){
     if (web3.utils.isAddress(address)) {
@@ -106,20 +106,20 @@ Coursetro = new web3.eth.Contract(
             ctx.font = "15px Arial";
             ctx.fillStyle = "black";
             ctx.textAlign = "center";
-            ctx.fillText("Welcome to the Doodle-Jump Blackchain-Project", screenWidth / 2, screenHeight / 2-50);
+            ctx.fillText("Welcome to the Doodle-Jump Blockchain project", screenWidth / 2, screenHeight / 2-50);
             ctx.fillText("The highscore of your account gets stored in the Etherium Blockchain", screenWidth / 2, screenHeight / 2-30);
-            ctx.fillText("When you die, your account will be blocked from trying to improve your highscore", screenWidth / 2, screenHeight / 2-10);
-            ctx.fillText("There are safepoints in the game, that you can jump into.", screenWidth / 2, screenHeight / 2+10);
+            ctx.fillText("When you die your account can no longer play the game", screenWidth / 2, screenHeight / 2-10);
+            ctx.fillText("There are safepoints in the game that you can jump into.", screenWidth / 2, screenHeight / 2+10);
             ctx.fillText("They allow you to end a run without dying.", screenWidth / 2, screenHeight / 2+30);
             ctx.fillText("Controls:", screenWidth / 2, screenHeight / 2+50);
             ctx.fillText("a: move left", screenWidth / 2, screenHeight / 2+70);
             ctx.fillText("d: move right", screenWidth / 2, screenHeight / 2+90);
             ctx.fillText("r: start a new game", screenWidth / 2, screenHeight / 2+110);
-            ctx.fillText("q: continue from this explenation screen", screenWidth / 2, screenHeight / 2+130);
+            ctx.fillText("q: continue from this explanation screen", screenWidth / 2, screenHeight / 2+130);
             ctx.fillText("This is your Doodle", screenWidth / 2, screenHeight / 2+280);
-            ctx.fillText("Its look is unique and stored in the Blockchain on your account", screenWidth / 2, screenHeight / 2+300);
+            ctx.fillText("It's look is unique and stored in the Blockchain on your account", screenWidth / 2, screenHeight / 2+300);
             ctx.fillText("If you are careless and let it die, there will be no other like it", screenWidth / 2, screenHeight / 2+320);
-            ctx.fillText("Be carefull", screenWidth / 2, screenHeight / 2+340);
+            ctx.fillText("Be careful", screenWidth / 2, screenHeight / 2+340);
             ctx.font = "20px Arial";
 
         }

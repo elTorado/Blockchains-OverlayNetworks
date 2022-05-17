@@ -40,18 +40,15 @@ contract doodleJump{
     }
 
     function random(uint number) public view returns(uint){
-        return uint(keccak256(abi.encodePacked(block.timestamp,block.difficulty,  
-        msg.sender))) % number;
+        return (uint(keccak256(abi.encodePacked(msg.sender)))%10000)*3 % number;
     }
 
     function random1(uint number) public view returns(uint){
-        return uint(keccak256(abi.encodePacked(block.difficulty,  
-        msg.sender))) % number;
+        return (uint(keccak256(abi.encodePacked(msg.sender)))%10000)*2 % number;
     }
 
     function random2(uint number) public view returns(uint){
-        return uint(keccak256(abi.encodePacked(block.timestamp,  
-        msg.sender))) % number;
+        return uint(keccak256(abi.encodePacked(msg.sender))) % number;
     }
 
 }
